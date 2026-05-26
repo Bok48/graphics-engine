@@ -5,6 +5,7 @@
 
 #include "vertexShader.h"
 #include "fragmentShader.h"
+#include "geometry.h"
 
 // Resize the viewport
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -123,25 +124,7 @@ int main()
 	glEnableVertexAttribArray(0);
 
 
-	float triangle[]{ // Unit triangle
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-	};
-
-
-	float square[]{ // Unit square
-		// Consists of two triangles
-		-0.5f, 0.5f, 0.0f, // Top left
-		-0.5f, -0.5f, 0.0f, // Bottom left
-		0.5f, -0.5f, 0.0f, // Bottom right
-		0.5f, 0.5f, 0.0f, // Top right
-	};
-
-	unsigned int indices[]{
-		0, 1, 2,
-		2, 3, 0,
-	};
+	
 
 	// Generate and bind Element Buffer Object
 	unsigned int EBO;
@@ -150,8 +133,8 @@ int main()
 
 
 	// Copy unit triangle or square into currently bound buffer
-	glBufferData(GL_ARRAY_BUFFER, sizeof(square), square, GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(unitSquare), unitSquare, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareIndices), squareIndices, GL_STATIC_DRAW);
 
 	// Generate and bind Vertex Array Object
 	unsigned int VAO2;
@@ -166,7 +149,7 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(unitTriangle), unitTriangle, GL_STATIC_DRAW);
 
 	// Render loop
 	while (!glfwWindowShouldClose(window))
