@@ -120,8 +120,12 @@ int main()
 	glDeleteShader(fragmentShader);
 
 	// Tells OpenGL how the data is stored (3 floats per vertex)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	// Color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 
 	
@@ -146,24 +150,39 @@ int main()
 	glGenBuffers(1, &VBO2);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	// Color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(unitTriangle), unitTriangle, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER,
+		         sizeof(unitTriangle), 
+		         unitTriangle, 
+		         GL_STATIC_DRAW);
+
+
 
 	// Render loop
 	while (!glfwWindowShouldClose(window))
 	{
-		glfwPollEvents();
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
 		glUseProgram(shaderProgram);
+
 		glBindVertexArray(VAO);
 	    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+		glBindVertexArray(VAO2);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+
 		glBindVertexArray(0);
 		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 
 
