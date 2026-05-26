@@ -3,31 +3,12 @@
 
 #include <iostream>
 
+#include "vertexShader.h"
+#include "fragmentShader.h"
+
 // Resize the viewport
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-// Vertex shader
-static const std::string vertexShaderSrc = R"(
-
-#version 330 core
-layout (location = 0) in vec3 aPos;
-
-void main() {
-    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-}
-)";
-
-// Fragment shader
-static const std::string fragmentShaderSrc = R"(
-#version 330 core
-out vec4 FragColor;
-
-void main()
-{
-    // Sets red, green, blue, alpha values
-    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-}
-)";
 
 
 int main()
