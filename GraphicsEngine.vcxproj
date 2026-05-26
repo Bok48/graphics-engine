@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="fragmentShader.h" />
     <ClInclude Include="geometry.h" />
+    <ClInclude Include="shader.h" />
     <ClInclude Include="vertexShader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
