@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "shader.h"
 #include "vertexShader.h"
 #include "fragmentShader.h"
 #include "geometry.h"
@@ -55,69 +56,10 @@ int main()
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	// Generate and compile vertex shader
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-	const GLchar* vss = vertexShaderSrc.c_str(); // glShaderSource wants GLchar type
-	glShaderSource(vertexShader, 1, &vss, NULL);
-	glCompileShader(vertexShader);
-
-	// Check vertex shader compilation results
-	int vertexSuccess;
-	char vertexInfoLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vertexSuccess);
-	if (!vertexSuccess)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, vertexInfoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << vertexInfoLog << std::endl;
-	}
-
-
-
-	// Generate and compile fragment shader
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	const GLchar* fss = fragmentShaderSrc.c_str();
-
-	glShaderSource(fragmentShader, 1, &fss, NULL);
-	glCompileShader(fragmentShader);
-
-	// Check fragment shader compilation results
-	int fragmentSuccess;
-	char fragmentInfoLog[512];
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fragmentSuccess);
-	if (!fragmentSuccess)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, fragmentInfoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << fragmentInfoLog << std::endl;
-	}
-
 	
-	// Generate and link final shader program
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	// Check shaderProgram success
-	int shaderSuccess;
-	char shaderInfoLog[512];
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &shaderSuccess);
-	if (!shaderSuccess) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, shaderInfoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKINK::FAILED\n" 
-			      << shaderInfoLog << std::endl;
-	}
-
-	glUseProgram(shaderProgram); // Shaders are now being used
-
-
-	// Unneeded after linking to shaderProgram
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	Shader ourShader(vertexShaderSrc, fragmentShaderSrc);
+	ourShader.use();
+	
 
 	// Tells OpenGL how the data is stored (3 floats per vertex)
 	// Position attribute
@@ -170,12 +112,14 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(shaderProgram);
+		ourShader.use();
 
+		ourShader.setFloat("horizontalOffset", 0.0f);
 		glBindVertexArray(VAO);
 	    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+		ourShader.setFloat("horizontalOffset", -0.0f);
 		glBindVertexArray(VAO2);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDrawArrays(GL_TRIANGLES, 0, 3);

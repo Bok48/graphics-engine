@@ -8,10 +8,10 @@
 class Shader {
 public:
 	// Program ID
-	unsigned int ID;
+	unsigned int ID{};
 
 	// Constructor reads and builds the shader
-	Shader(const char* vertexPath, const char* fragmentPath);
+	Shader(const std::string& vss, const std::string& fss);
 
 	// Use or activate the shader
 	void use();
